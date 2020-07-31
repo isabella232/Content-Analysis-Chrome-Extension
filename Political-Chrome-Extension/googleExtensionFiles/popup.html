@@ -91,6 +91,18 @@
                 color: white;
            }
 
+           .button2 {
+                background-color: white; 
+                color: black; 
+                border: 2px solid #4CAF50;
+                padding: 8px 120px;
+           }
+
+            .button2:hover {
+                background-color: #4CAF50;
+                color: white;
+           }
+
            .description1 {
                 color: #444;
                 font-size: 9px;
@@ -108,7 +120,7 @@
 
     </head>
 
-    <body>
+    <body id="body">
         <div class="modal-header">
 
             <h1 class="logo">
@@ -118,6 +130,7 @@
             </h1>
 
         </div>
+
         <div class="modal-content">
             <!--div>
                 <scripßt type='text/javascript' src='scripts/chart.js'></script>
@@ -137,8 +150,12 @@
                 <button class="button1" id="analyticsButton">Check Sentiment!</button>
                 <button class="button1" id="switchButton">Switch Graphs</button>
                 <!-- come back and change color with button2 class -->
-            </div>
+            <!-- </div> -->
         </div>
+
+        <button class="button2" id="searchButton">Search for Loosely Connected Articles</button>
+
         <script type='text/javascript' src='scripts/popup.js'></script>
+        <p id="search"></p>
     </body>
 </html>
