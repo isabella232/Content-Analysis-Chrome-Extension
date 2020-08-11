@@ -1,3 +1,4 @@
 azure-functions
 azure-ai-textanalytics
 newspaper3k
+twilio

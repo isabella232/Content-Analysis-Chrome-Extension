@@ -2,34 +2,41 @@ import logging
 import azure.functions as func
 import json
 import requests
+from twilio.rest import Client
 
 subscription_key = "acaa102d183f4260965c782bc60e2199"
 search_url = "https://api.cognitive.microsoft.com/bing/v7.0/news/search"
+
+account_sid = "AC7ed69f2740a5cd14793b45eab5f61d5e"
+auth_token = "eebf5a01555f36ca6eccb0b98fd4ee64"
+temp_twilio_num = "+14804055791"
+
+receiver_num = ""
 
 counter = 1
 search_term = ""
 
 value_data_list = []
 
+twilio_success = False
 
 headers = {"Ocp-Apim-Subscription-Key" : subscription_key}
 params  = {"q": search_term, "count": counter}
-#
-# Make sure to keep your keys private, you're gonna get scraped!
-# Also, figure how tf your calls reached 56k
-# Also, set up new Azure account for 30 more days of free trial
-#
-#
+
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     global search_terms
     global counter
     global value_data_list
+    global receiver_num
+
 
     logging.info('Python HTTP trigger function processed a request.')
 
     phrases = req.params.get('phrases')
     url = req.params.get('url')
+    receiver = req.params.get('receiver')
+
     count = req.params.get('count')
     if not phrases:
         try:
@@ -40,18 +47,24 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             phrases = req_body.get('phrases')
     if count:
         counter = count
-    if phrases and url:
+
+    if phrases and url and receiver:
         search_terms = phrases
+        receiver_num = receiver
 
         data_dict = create_data_dict()
         set_data_list(data_dict)
         check_for_initial(url)
 
+        for data in value_data_list:
+            twilio_message("Article Name: " + data["name"])
+            twilio_message("Article URL: " + data["url"])
+            twilio_message("Article Description: " + data["description"])
+
         return func.HttpResponse(get_json_results())
     else:
         return func.HttpResponse(
-             "Please pass a search query phrase on the query string or in the request body",
-             status_code=400
+             "test"
         )
 
 def create_data_dict():
@@ -76,7 +89,7 @@ def check_for_initial(url):
             value_data_list.remove(data)
 
 def get_json_results():
-    python_results = { "site" : value_data_list }
+    python_results = { "success" : twilio_success }
     reset_values()
     return json.dumps(python_results)
 
@@ -84,8 +97,26 @@ def reset_values():
     global counter
     global search_term
     global value_data_list
+    global twilio_success
+    global receiver_num
+
+    receiver_num = ""
     
     counter = 1
     search_term = ""
 
     value_data_list = []
+
+    twilio_success = False
+
+def twilio_message(body_message):
+    global twilio_success
+
+    client = Client(account_sid, auth_token)
+
+    client.api.account.messages.create(
+        to="+1" + receiver_num,
+        from_=temp_twilio_num,
+        body=body_message)
+
+    twilio_success = True

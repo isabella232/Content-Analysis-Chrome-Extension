@@ -52,11 +52,11 @@
 
             .modal-header {
                 align-items: center;
-                border-bottom: 5px solid #c09aea;
+                border-bottom: 5px solid #6a4c93;
             }
             .modal-content {
                 padding: 0 16px;
-                border-bottom: 5px solid #c09aea;
+                border-bottom: 5px solid #6a4c93;
                 overflow: hidden;
             }
             .modal-button {
@@ -76,30 +76,26 @@
                 line-height: 0.5;
 
             }
-            .loading {
-                size: 50px
-            }
-
             .button1 {
                 background-color: white; 
                 color: black; 
-                border: 2px solid #4CAF50;
+                border: 2px solid #1982c4;
            }
 
             .button1:hover {
-                background-color: #4CAF50;
+                background-color: #1982c4;
                 color: white;
            }
 
            .button2 {
                 background-color: white; 
                 color: black; 
-                border: 2px solid #4CAF50;
+                border: 2px solid #1982c4;
                 padding: 8px 120px;
            }
 
             .button2:hover {
-                background-color: #4CAF50;
+                background-color: #1982c4;
                 color: white;
            }
 
@@ -115,47 +111,45 @@
                 line-height: 1;
                 padding-left: 68.5px;
            }
-           
+           .final {
+               display: none;
+               font-size: 20px
+           }
+           .text1 {
+               padding: 16px;
+               font-size: 20px;
+           }
+           .sign {
+               display: none;
+           }
         </style>
 
     </head>
 
     <body id="body">
         <div class="modal-header">
-
             <h1 class="logo">
                 <img src="images/icon_128.png" alt="Content Leaning Launcher" class="logo-icon"> Content Analyzer <span class="version"> (1.0.0)</span> 
                 <span class="description1">See analytics for content you're currently reading.</span>
-                <span class="description2">Offering coverage of text sentiment and difficulty.</span>
+                <span class="description2">Analyzing article sentiment, difficulty, & leaning.</span>
             </h1>
 
         </div>
 
         <div class="modal-content">
-            <!--div>
-                <scripßt type='text/javascript' src='scripts/chart.js'></script>
-                <canvas id="sentimentChart" width="400" height="400"></canvas>
-                <script type='text/javascript' src='scripts/popup.js'></script>
-                <p id="p"></p>
-                <button class="button1" id="sentimentButton">Check Sentiment!</button>
-            </div><div>
-                <script type='text/javascript' src='scripts/chart.js'></script>
-                <canvas id="difficultyChart" width="400" height="400"></canvas>
-                <script type='text/javascript' src='scripts/popup.js'></script>
-                <p id="p"></p-->
                 <script type='text/javascript' src='scripts/chart.js'></script>
                 <canvas id="analysisChart" width="400" height="400"></canvas>
-                <input type="text" placeholder="Enter URL:" size="48" id="urlPlaceholder">
-                <p id="p">Final Result: </p>
+                <p id="p" class="final">Final Result: </p>
                 <button class="button1" id="analyticsButton">Check Sentiment!</button>
                 <button class="button1" id="switchButton">Switch Graphs</button>
-                <!-- come back and change color with button2 class -->
-            <!-- </div> -->
         </div>
 
         <button class="button2" id="searchButton">Search for Loosely Connected Articles</button>
 
+        <input class="text1"  type="text" placeholder="Enter Phone Number:" size="35" id="phonePlaceholder">
+
+        <p id="sign" class="sign">*</p>
+
         <script type='text/javascript' src='scripts/popup.js'></script>
-        <p id="search"></p>
     </body>
 </html>

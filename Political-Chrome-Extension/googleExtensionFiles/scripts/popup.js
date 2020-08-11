@@ -8,17 +8,17 @@ var analysisChart = new Chart(document.getElementById('analysisChart'), {
         datasets: [{ 
             data: [],
             label: "Positive",
-            borderColor: "green",
+            borderColor: "#8ac926",
             fill: false
         }, { 
             data: [],
             label: "Negative",
-            borderColor: "red",
+            borderColor: "#FF595E",
             fill: false
         }, { 
             data: [],
             label: "Neutral",
-            borderColor: "blue",
+            borderColor: "#FFCA3A",
             fill: false
         }]
     },
@@ -51,17 +51,27 @@ var typeIndex = 0;
 
 var searchIndicator = 0;
 
-var analyticsButton = document.getElementById("analyticsButton").addEventListener("click", getCurrentUrl);
-var switchButton = document.getElementById("switchButton").addEventListener("click", switchAnalysis);
-var searchButton = document.getElementById("searchButton").addEventListener("click", switchSearch);
+var analyticsButton = document.getElementById("analyticsButton");
+var switchButton = document.getElementById("switchButton");
+var searchButton = document.getElementById("searchButton");
+
+if (analyticsButton){
+    analyticsButton.addEventListener("click", getCurrentUrl);
+} if (switchButton){
+    switchButton.addEventListener("click", switchAnalysis);
+} if (searchButton){
+    searchButton.addEventListener("click", switchSearch);
+}
+
 
 function switchSearch() {
+    var searchBar = document.getElementById("text1");
     if (searchIndicator == 1) {
         searchIndicator = 0
-        document.getElementById("search").innerHTML = " "
+        document.getElementById("sign").style.display = "none"
     } else if (searchIndicator == 0) {
         searchIndicator = 1
-        document.getElementById("search").innerHTML = " * "
+        document.getElementById("sign").style.display = "block"
     }
 }
 
@@ -85,6 +95,7 @@ function resetValues() {
     analysisChart.data.datasets[1].data = [];
     analysisChart.data.datasets[2].data = [];
 
+    document.getElementById("p").style.display = "none"
 
     analysisChart.update();
 }
@@ -153,19 +164,17 @@ function switchToLeaning() {
 
 function getCurrentUrl() {
     resetValues();
-    var url = document.getElementById('urlPlaceholder').value;
-    analyseFunction(url, typeArray[typeIndex]);
-    // chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-    //     let url = tabs[0].url;
-    //     analyseFunction(url, type);
-    // }); 
-
-    // use for extension
-    
+    // var url = document.getElementById('urlPlaceholder').value;
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+        let url = tabs[0].url;
+        analyseFunction(url, typeArray[typeIndex]);
+    }); 
 }
 
 async function analyseFunction(url, type){
-    console.log("pressed")
+    document.getElementById("p").innerHTML = "Final Result: "
+    document.getElementById("p").style.display = "block"
+
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     var currentUrl = "?name=".concat(url);
     var phrases = "&phrases=".concat(searchIndicator);
@@ -176,8 +185,6 @@ async function analyseFunction(url, type){
         const response = await fetch(proxyurl + analyseFunctionUrl + currentUrl + phrases + analysis + cycle);
         const jsonData = await response.json();
 
-        // figure out how to deal with bug - when extension runs on chrome://extensions, returns empty json 
-        // just add as a feature for both rn, in future change to be its own page
         if (!jsonData.continue) {
             continueRunning = false;
         } else if (type.localeCompare("sentiment") == 0) {
@@ -186,7 +193,7 @@ async function analyseFunction(url, type){
             updateSentimentChart(counter);
 
             if (searchIndicator == 1) {
-                updateKeyPhraseArray(jsonData); //
+                updateKeyPhraseArray(jsonData);
             }
         } else if (type.localeCompare("difficulty") == 0) {
             counter++;
@@ -194,7 +201,7 @@ async function analyseFunction(url, type){
             updateDifficultyChart(counter);
 
             if (searchIndicator == 1) {
-                updateKeyPhraseArray(jsonData); //
+                updateKeyPhraseArray(jsonData);
             }
         } else if (type.localeCompare("leaning") == 0) {
             counter++;
@@ -202,7 +209,7 @@ async function analyseFunction(url, type){
             updateLeaningChart(counter);
 
             if (searchIndicator == 1) {
-                updateKeyPhraseArray(jsonData); //
+                updateKeyPhraseArray(jsonData);
             }
         } else {
             continueRunning = false;
@@ -269,31 +276,30 @@ async function searchFunction(url) {
 
     var phrases = "?phrases=".concat(phrasesString);
     var currentUrl = "&url=".concat(url);
-    //add counter feature afterwards
-    const response = await fetch(proxyurl + searchFunctionUrl + phrases + currentUrl);
+    var phoneUrl = "&receiver=".concat(document.getElementById('phonePlaceholder').value);
+    const response = await fetch(proxyurl + searchFunctionUrl + phrases + currentUrl + phoneUrl);
     const jsonData = await response.json();
 
-    var articleName = jsonData.site[0].name
-    var articleDescription = jsonData.site[0].description
-    var articleUrl = jsonData.site[0].url
-
-    const article = "Article Title: ".concat(articleName).concat("\nDescription: ").concat(articleDescription).concat("\nLink: ").concat(articleUrl)
-    // document.getElementById("search").innerHTML = " * Article Title: ".concat(articleName)
-    // .concat("\nDescription: ").concat(articleDescription)
-    // .concat("\nURL: ").concat(articleUrl)
-    window.alert(article)
+    if (jsonData.success) {
+        window.alert("Check your phone!")
+    } else {
+        window.alert("Nah")
+    }
 }
 
 function giveResults(type, counter){
     if (type.localeCompare("sentiment") == 0){
         updateSentimentChart(counter);
         document.getElementById("p").innerHTML = "Final Result: ".concat(getSentiment());
+        document.getElementById("p").style.display = "block"
     } else if (type.localeCompare("difficulty") == 0){
         updateDifficultyChart(counter);
         document.getElementById("p").innerHTML = "Final Result: ".concat(getDifficulty());
+        document.getElementById("p").style.display = "block"
     } else if (type.localeCompare("leaning") == 0){
         updateLeaningChart(counter);
         document.getElementById("p").innerHTML = "Final Result: ".concat(getLeaning(counter));
+        document.getElementById("p").style.display = "block"
     }
 }
 
