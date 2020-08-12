@@ -5,14 +5,14 @@ Wouldn't it be great if you, just for once, flex on BIG TECHNOLOGY by exposing t
 Wouldn't it be nice if you can have an illusion of control to help cope with the unstoppable force of entropy and the inevitable heat death of the universe?
 Wouldn't it be amazing if you could replace our evil *itallics Human Overlords*, and replace them with Robot Overlords instead?
 
-Well dear reader, I'm afraid you'll have to wait another day for the glorious hivemind revolution. In the meantime, allow me to introduce you to the predecessor to the greatest program of all time, _**"""The Content Analyzer"""**_ (trademark pending). 
+Well dear reader, I'm afraid you'll have to wait another day for the glorious hivemind revolution. In the meantime, allow me to introduce you to the predecessor to the greatest program of all time, _**"The Content Analyzer"**_ (trademark pending). 
 
 This revoutionary spaghetti code will stumble into your lovely heart by doing something pretty nharly. 
 This bad boi is a chrome extension that's able to look over the website you're reading and dish out analytics on the sentiment, difficulty, and the freakin' political leaning of the text. 
 
 ![](images/sentiment.jpg)![](images/difficulty.jpg)![](images/leaning.jpg)
 
-This program can even replace your grandchildren! How? Cuz unlike those ungrateful millenials, the _**"""The Content Analyzer"""**_  can keep you company and text you (semi-related articles based on random key words):
+This program can even replace your grandchildren! How? Cuz unlike those ungrateful millenials, the _**"The Content Analyzer"**_  can keep you company and text you (semi-related articles based on random key words):
 
 <img src="images/message.jpg" width="500">
 (Please note that I'm using a trial account, so that's why it looks annoying)
@@ -72,6 +72,7 @@ As you can see, the json data contains 3 distinct parts. First is value, which i
 After the function runs, the final result is written into the popup.html and ever value is reset to default.
 
 ## Backend(WebScrape.py)
+
 ![](images/WebScrape.jpg)
 
 Let's finally talk about backend. To begin, once the params are passed over, they are utilized to update the values for the global variables. In the process, functions from the WebScrape.py file breaks the article down into chunks. The Python library, Newspaper (a more lightweight version of BeautifulSoup), takes in a url and returns a list. This list is then broken down by other functions until a analyzable list is created (right size). Above is the code used to accomplish this task; I'm gonna skip over the nitty gritty cuz the various loops and conditional statements have destroyed every remaining braincell in my body. Just understand that I designed that section like that in order to prevent a couple nasty edge cases.
@@ -87,18 +88,30 @@ Basically, OOP, or object-orientated programming, is the idea of creating classe
 Essentially, I utilized the OOP concepts of Inheritance and Polymorphism to weasle out of writing conditional statements and seperate functions. By having a parental relation and overriding methods when needed, I can guarantee that a method does exist, even if I don't know the actual class. An example would be the a.analyse(client, document, i) line in the get_analytics function. Additionally, I utilized Inheritance in order to handle the get_phrases methods. This allows me to be able to create the get_phrases anywhere else, without being limited to this singular project.
 
 ## Backend(Analyze & key_phrase_list)
-Speaking of get_phrases, let's talk about phrases really quick. To extract key phrases, I am using the Microsoft Text Analysis API, which is able to extract key phrases. The way the program is set up, the parent class, Analyze, possesses methods to help handle and shorten the list for phrases. These methods are only called when get_phrases (one of the params from the beginning), is true. Due to the nature of the API, extracting phrases often creates wayy too many to be utilized for search purposes. To solve this, I run the new list in the key phrase extract once. Proceeding this, in order to shorten key phrases to a more managable amount while also conserving resources, I utilize a random function to keep key phrases. Is that cheating? Perhaps. But you try paying for Azure products, stuff ain't cheap.
+Analyze is a glorified abstract class:
 
-Analyze is a glorified abstract class. The only difference is that I added 2 actual methods to it last minute in order to create better code. By having Analyze handle key_phrase extraction, the code is a lot more concise and I can just call class objects for the functions.
+![](images/Analyze.jpg)
+
+The only difference is that I added 2 actual methods to it last minute in order to create better code. By having Analyze handle key_phrase extraction, the code is a lot more concise and I can just call class objects for the functions.
+
+Speaking of key phrases, I am using the Microsoft Text Analysis API, which is able to extract key phrases. The way the program is set up, the parent class, Analyze, possesses methods to help handle and shorten the list for phrases. These methods are only called when get_phrases (one of the params from the beginning), is true. Due to the nature of the API, extracting phrases often creates wayy too many to be utilized for search purposes. 
+
+To solve this, I run the new list in the key phrase extract once. Proceeding this, in order to shorten key phrases to a more managable amount while also conserving resources, I utilize a random function to keep key phrases. Is that cheating? Perhaps. Is it a disappointment? Worse than finding out Santa isn't real. But in my defense, I'm like super broke, so I ain't about to run like 50 extra calls to get a more accurate list. And in my POV, the randomization just makes stuff cooler and more eccentric.
 
 ## Backend(Sentiment)
-Let us now examine each of the Analyze children classes, starting with Sentiment. Sentiment analysis works by using the Microsoft Text Analysis. Not much to not about it lol.
+Let us now examine each of the Analyze children classes, starting with Sentiment. Sentiment analysis works by using the Microsoft Text Analysis. Not much to not about it lol. It's pretty cool I guess. Only minorly interesting thing is that I got lazy and just made all methods tha effected global variables into class methods. 
+
+![](images/Sentiment-code.jpg)
 
 ## Backend(Difficulty)
 For this class, I just yoinked some code from stackoverflow to track sentences, words, and syllable counts. The difficulty analysis is based on the flesch reading test, which is pretty cool, high digits means it's easy, low digits means it's hard. You just plug stuff into a simple equation with some really janky numbers. The only thing to note is that I'm an idiot and my code should be slapped with a please do not try this at home sticker, as I tried to use self and cls in a class method. Basically, to keep it sweet and simple, this is terrible practice and I don't deserve rights.
 
+![](images/Difficulty-code.jpg)
+
 ## Backend(Leaning)
 This class was easy to set up thanks to everything else. The API I'm using to measure politcal leaning is from the non-profit organization, Bi-Partisan Press. Super cool of them to give me access, it's pretty fun to play with this API. It's a simple POST request which gets you the politcal leaning of texts. -42 to 42, negatives indicate left leaning.
+
+![](images/Leaning-code.jpg)
 
 ## Backend(get_json)
 After analyzing everything, you set it to a variable dictionary, which is also a shared class method. Other than that, you just need to return the data as a JSON object, and reset all variables. The only other thing to note is that when the text list is empty, a function is called which sets the continue_running value (remember from wayyyy earlier) to false.
@@ -109,8 +122,14 @@ After getting data from the backend and the analysis is completed, if the search
 ## Backend(Azure Function 2)
 The Bing News search engine API is first called to get semi-relevant news based on the phrase list. The response of this API gives 3 important infos. The first is the article title, second is url, and the final is a description. Once This information is saved, a quick call to the Twilio API sends these three pieces of information in segments to the requested number.
 
+![](images/function-2.jpg)
+
 ## Frontend(DONE)
-You are told to check your phone and the messages should show up. You're done. That's it. You can see your family now. Thanks for sitting through hell with me.
+You are told to check your phone and the messages should show up. 
+
+![](images/notification.jpg)
+
+You're done. That's it. You can see your family now. Thanks for sitting through hell with me. If y'all are still confused, check out the source code ig. Otherwise, feel free to check out the promotional video to this post. Dope project, just super burnt out but relieved to actually have finished it.
 
 
 
