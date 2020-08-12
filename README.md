@@ -1,6 +1,3 @@
-# Content-Analysis-Chrome-Extension
-Chrome extension that examines articles via Azure Functions. Analysis ranges from article sentiment to text difficulty. To use, upload file onto chrome://extension developer mode. Alternatively, run on local host and open googleExtensionFiles/popup.html.
-
 # A 20 Minute Blog/Rant on The World's Most Convoluted Google Extension
 
 Greetings! Are you a plebeian tired of having your emotions ruled by the Shadow Lizard Illuminati? 
