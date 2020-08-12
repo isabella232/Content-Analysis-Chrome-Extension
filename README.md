@@ -11,7 +11,7 @@ Wouldn't it be amazing if you could replace our evil *itallics Human Overlords*,
 Well dear reader, I'm afraid you'll have to wait another day for the glorious hivemind revolution. In the meantime, allow me to introduce you to the predecessor to the greatest program of all time, "The Content Analyzer" (trademark pending). 
 
 This revoutionary spaghetti code will stumble into your lovely heart by doing something pretty nharly. 
-This bad boi is a chrome extension that's able to look over the website you're reading and dish out analytics on the sentiment ![](images/sentiment.jpeg), difficulty ![](images/difficulty.jpeg), and the freakin' political leaning of the text ![](images/leaning.jpeg). The program also fulfills Maslow's basic hierarchy of needs! The program does the un imaginable, and messages you semi-related articles sometimes! ![](images/message.jpeg). 
+This bad boi is a chrome extension that's able to look over the website you're reading and dish out analytics on the sentiment ![](/images/sentiment.jpeg), difficulty ![](images/difficulty.jpeg), and the freakin' political leaning of the text ![](images/leaning.jpeg). The program also fulfills Maslow's basic hierarchy of needs! The program does the un imaginable, and messages you semi-related articles sometimes! ![](images/message.jpeg). 
 
 Hi, my name is Jesse Lee and I lowkey hate myself. That's why I decided to make this god-forsaken Google Chrome Extension, the most extra and convoluted thingy in the concievable universe. Want proof of my degeneracy? Just take a look at this stupid flowchart:
 ![](images/Flowchart.jpeg)
